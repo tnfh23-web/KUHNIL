@@ -132,6 +132,14 @@ body {
   transform-origin: center;
   transform: scale(0.6); /* 처음부터 작게 */
 }
+.sec-3 .bg-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  pointer-events: none;
+}
 .sec-3-text-box {
   position: absolute;
   top: 50%;
@@ -148,7 +156,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   white-space: nowrap;
   pointer-events: none;
   font-size: 6.4rem;
