@@ -1,6 +1,18 @@
 // 스크롤 트리거 플러그인 활성화
 gsap.registerPlugin(ScrollTrigger);
-// GSAP scrollTrigger ------------------------------ //
+
+// sec-2 scroll-text gsap
+gsap.to(".sec-2-scroll-text", {
+  "--hlw": "224px",
+  duration: 0.6,
+  ease: "power2.out",
+  scrollTrigger: {
+    trigger: ".sec-2-scroll-text",
+    start: "top 80%",
+    toggleActions: "play none none reverse",
+  },
+});
+// sec-3 gsap ------------------------------ //
 function scrollTrigger__init() {
   const tl = gsap.timeline({
     scrollTrigger: {
