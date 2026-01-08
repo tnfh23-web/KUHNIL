@@ -49,5 +49,19 @@ function scrollTrigger__init() {
 
     .fromTo(".t5", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 });
 }
+// sec-2 tab
+
+$(".tab-btn li").on("click", function (e) {
+  e.preventDefault();
+
+  const idx = $(this).index();
+
+  // 탭 active
+  $(".tab-btn li").removeClass("active");
+  $(this).addClass("active");
+
+  // 탭 전환
+  $(".tab-list-box").removeClass("active").eq(idx).addClass("active");
+});
 
 window.addEventListener("load", scrollTrigger__init);

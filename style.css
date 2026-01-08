@@ -384,6 +384,80 @@ body {
 
 /* 섹션3 끝 */
 
+/* 섹션 4 시작 */
+
+.sec-4-grid {
+  max-width: var(--maxwidth);
+  margin: 0 auto;
+  padding: 15rem 0;
+}
+.sec-4-grid .title-text-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.sec-4-grid .title-text-box h2 {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+.sec-4-grid .title-text-box p {
+  font-size: 4.8rem;
+  font-weight: 400;
+}
+.sec-4-grid .tab-box .tab-btn {
+  display: flex;
+  gap: 0.8rem;
+  padding-top: 2rem;
+}
+.sec-4-grid .tab-box .tab-btn li {
+  padding: 0 0.8rem;
+}
+.sec-4-grid .tab-box .tab-btn li.active {
+  padding-bottom: 1.2rem;
+  border-bottom: 0.3rem solid var(--point-color-2);
+}
+.sec-4-grid .tab-box .tab-btn li.active a span {
+  color: var(--point-color-2);
+}
+.sec-4-grid .tab-box .tab-btn li a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sec-4-grid .tab-box .tab-btn li a span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 2.6rem;
+  font-weight: 700;
+}
+.sec-4-grid .tab-list-box {
+  display: none;
+}
+.sec-4-grid .tab-list-box.active {
+  display: block;
+}
+.sec-4-grid .tab-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding: 2rem 0;
+}
+.sec-4-grid .tab-list .text-box h2 {
+  font-size: 4.2rem;
+  font-weight: 700;
+  padding-bottom: 2rem;
+}
+.sec-4-grid .tab-list .text-box p {
+  font-size: 2.6rem;
+  font-weight: 500;
+}
+.sec-4-grid .tab-list .img-box {
+  width: 47.3rem;
+  height: 31.5rem;
+}
+/* 섹션 4 끝 */
+
 /* 풋터 시작 */
 
 .footer-grid {
