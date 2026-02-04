@@ -1,26 +1,4 @@
 /* 프리텐다드 폰트  */
-
-@font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2") format("woff2");
-  font-weight: 100;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2") format("woff2");
-  font-weight: 200;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2") format("woff2");
-  font-weight: 300;
-  font-display: swap;
-}
-
 @font-face {
   font-family: "Pretendard";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2") format("woff2");
@@ -37,29 +15,8 @@
 
 @font-face {
   font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Pretendard";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2") format("woff2");
   font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2") format("woff2");
-  font-weight: 900;
   font-display: swap;
 }
 /* 노멀라이즈 시작 */
@@ -101,9 +58,6 @@ body {
   color: #fff;
 }
 .sec-1 {
-  height: 1000px;
-}
-.sec-4 {
   height: 1000px;
 }
 
@@ -325,10 +279,10 @@ body {
 /* 섹션3 시작 */
 
 .sec-3 {
-  display: none;
   width: 100%;
   height: 100%;
   position: relative;
+  display: none;
   z-index: 6;
 }
 .sec-3 .content-wrap {
@@ -419,6 +373,7 @@ body {
 }
 .sec-4-grid .tab-box .tab-btn li.active a span {
   color: var(--point-color-2);
+  font-weight: 700;
 }
 .sec-4-grid .tab-box .tab-btn li a {
   display: block;
@@ -430,7 +385,7 @@ body {
   width: 100%;
   height: 100%;
   font-size: 2.6rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 .sec-4-grid .tab-list-box {
   max-height: 0;
@@ -439,7 +394,10 @@ body {
   visibility: hidden;
   transform: translateY(1.6rem);
 
-  transition: max-height 0.6s, opacity 0.6s, transform 0.6s;
+  transition:
+    max-height 0.6s,
+    opacity 0.6s,
+    transform 0.6s;
 }
 .sec-4-grid .tab-list-box.active {
   max-height: fit-content;
@@ -468,6 +426,55 @@ body {
   height: 31.5rem;
 }
 /* 섹션 4 끝 */
+
+/* 섹션 5 시작 */
+.sec-5 {
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+}
+.sec-5 .sec-5-grid {
+  max-width: var(--maxwidth);
+  margin: 0 auto;
+}
+.sec-5 .sec-5-wrap {
+  position: relative;
+}
+.sec-5 .sec-5-grid img {
+  object-fit: cover;
+  width: 46.5rem;
+  height: 40.2rem;
+}
+
+.sec-5-grid .sec-5-text-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  z-index: 7;
+}
+
+.sec-5-grid .sec-5-text-box .sec-5-text-1 {
+  white-space: nowrap;
+  font-size: 6.4rem;
+  font-weight: 700;
+  text-align: center;
+}
+.sec-5-grid .sec-5-text-box .sec-5-text-2 {
+  white-space: nowrap;
+  font-size: 6.8rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+/* 섹션 5 끝 */
 
 /* 풋터 시작 */
 
