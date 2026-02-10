@@ -1,18 +1,16 @@
-/* 프리텐다드 폰트  */
+/* 프리텐다드 폰트 */
 @font-face {
   font-family: "Pretendard";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
-
 @font-face {
   font-family: "Pretendard";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2") format("woff2");
   font-weight: 500;
   font-display: swap;
 }
-
 @font-face {
   font-family: "Pretendard";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2") format("woff2");
@@ -20,7 +18,6 @@
   font-display: swap;
 }
 /* 노멀라이즈 시작 */
-
 html,
 body,
 h1,
@@ -39,15 +36,12 @@ p {
 a {
   text-decoration: none;
   color: inherit;
-}
-
-/* 노멀라이즈 끝 */
+} /* 노멀라이즈 끝 */
 img {
   width: 100%;
   height: 100%;
   display: block;
-}
-/* html 기본 설정 */
+} /* html 기본 설정 */
 html {
   font-family: "pretendard", sans-serif;
   font-size: max(0.52083333vw, 10px);
@@ -57,10 +51,72 @@ body {
   background-color: var(--background-color);
   color: #fff;
 }
+/* 헤더 시작 */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 8rem;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(2rem);
+  transition:
+    transform 0.6s ease,
+    opacity 0.6s ease;
+  will-change: transform;
+}
+.top-bar .container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--maxwidth);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.top-bar .container .text-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11rem;
+}
+.top-bar .container .text-box a {
+  display: flex;
+  position: relative;
+  font-size: 2.2rem;
+  font-weight: 500;
+  padding-bottom: 1rem;
+  letter-spacing: -0.02rem;
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+.top-bar .container .text-box a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: var(--point-color-2);
+  width: 100%;
+  height: 0.2rem;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: all 0.3s;
+}
+.top-bar .container .text-box a:hover::after {
+  transform: scaleX(1);
+}
+.top-bar .container .text-box a:hover {
+  color: var(--point-color-2);
+}
+.top-bar .logo-box img {
+  width: 24rem;
+}
+/* 헤더 끝 */
 .sec-1 {
   height: 1000px;
 }
-
 /* 섹션2 시작 */
 .sec-2 {
   padding: 15rem;
@@ -113,7 +169,6 @@ body {
   z-index: 0;
   --hlw: 0px;
 }
-
 .sec-2-grid .sec-2-scroll-text::before {
   content: "";
   position: absolute;
@@ -275,14 +330,11 @@ body {
   border-radius: 5rem;
 }
 /* 섹션2 끝 */
-
 /* 섹션3 시작 */
-
 .sec-3 {
   width: 100%;
   height: 100%;
   position: relative;
-  display: none;
   z-index: 6;
 }
 .sec-3 .content-wrap {
@@ -324,7 +376,6 @@ body {
   text-align: center;
   z-index: 7;
 }
-
 .sec-3-text {
   position: absolute;
   top: 50%;
@@ -336,11 +387,8 @@ body {
   font-weight: 700;
   text-align: center;
 }
-
 /* 섹션3 끝 */
-
 /* 섹션 4 시작 */
-
 .sec-4-grid {
   max-width: var(--maxwidth);
   margin: 0 auto;
@@ -393,7 +441,6 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(1.6rem);
-
   transition:
     max-height 0.6s,
     opacity 0.6s,
@@ -426,7 +473,6 @@ body {
   height: 31.5rem;
 }
 /* 섹션 4 끝 */
-
 /* 섹션 5 시작 */
 .sec-5 {
   width: 100%;
@@ -440,12 +486,15 @@ body {
 .sec-5 .sec-5-wrap {
   position: relative;
 }
-.sec-5 .sec-5-grid img {
-  object-fit: cover;
-  width: 46.5rem;
-  height: 40.2rem;
+.sec-5 .sec-5-grid .sec-5-text-con-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  z-index: 20;
+  pointer-events: none;
 }
-
 .sec-5-grid .sec-5-text-box {
   display: flex;
   flex-direction: column;
@@ -460,7 +509,6 @@ body {
   overflow: hidden;
   z-index: 7;
 }
-
 .sec-5-grid .sec-5-text-box .sec-5-text-1 {
   white-space: nowrap;
   font-size: 6.4rem;
@@ -473,11 +521,65 @@ body {
   font-weight: 400;
   text-align: center;
 }
-
+.sec-5 .sec-5-grid .img-box {
+  max-width: var(--maxwidth);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8rem;
+  position: relative;
+  z-index: 10;
+}
+.sec-5-img-left {
+  margin-right: auto;
+}
+.sec-5-img-right {
+  margin-left: auto;
+}
+.sec-5 .sec-5-grid .img-box img {
+  object-fit: cover;
+  width: 46.5rem;
+  height: 40.2rem;
+}
+.sec-5-grid .button-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sec-5-grid .button-box .button a {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 50;
+  border-radius: 4rem;
+  overflow: hidden;
+  font-size: 2.5rem;
+  font-weight: 400;
+  padding: 2.6rem 10rem;
+  border: 1px solid #fff;
+  width: fit-content;
+  height: fit-content;
+  transition: all 0.5s ease;
+}
+.sec-5-grid .button-box .button a::before {
+  content: "";
+  background-color: #fff;
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+.sec-5-grid .button a:hover::before {
+  transform: scaleX(1);
+}
+.sec-5-grid .button a:hover {
+  color: #111 !important;
+}
 /* 섹션 5 끝 */
-
 /* 풋터 시작 */
-
 .footer-grid {
   max-width: var(--maxwidth);
   margin: 0 auto;

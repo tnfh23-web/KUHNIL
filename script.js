@@ -39,12 +39,12 @@ gsap.to(".sec-2-scroll-text", {
   },
 });
 // sec-3 gsap ------------------------------ //
-function scrollTrigger__init() {
+function sec_3_scrollTrigger__init() {
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: ".sec-3 .content-wrap",
       start: "top top",
-      end: "+=600%",
+      end: "+=400%",
       pin: true,
       scrub: 1,
       anticipatePin: 1,
@@ -57,7 +57,7 @@ function scrollTrigger__init() {
   tl.to(".sec-3 .bg-container img", {
     scale: 1,
     ease: "none",
-    duration: 3,
+    duration: 1,
   });
 
   // 2) 텍스트 시퀀스 (bg 커진 다음 이어서)
@@ -71,9 +71,7 @@ function scrollTrigger__init() {
     .to(".t3", { opacity: 0, duration: 0.4 })
 
     .fromTo(".t4", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 })
-    .to(".t4", { opacity: 0, duration: 0.4 })
-
-    .fromTo(".t5", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 });
+    .to(".t4", { opacity: 0, duration: 0.4 });
 }
 // sec-4 tab
 
@@ -90,4 +88,50 @@ $(".tab-btn li").on("click", function (e) {
   $(".tab-list-box").removeClass("active").eq(idx).addClass("active");
 });
 
-window.addEventListener("load", scrollTrigger__init);
+// sec-5 gsap
+function sec_5_scrollTrigger__init() {
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".sec-5",
+      start: "top top",
+      end: () => "+=" + window.innerHeight * 4,
+      pin: ".sec-5-text-con-box",
+      pinSpacing: true,
+      scrub: 1,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  tl.set(".sec-5 .img-box", { y: () => -(window.innerHeight * 4) }, 0);
+
+  tl.set(".sec-5-text-box", { autoAlpha: 0 });
+
+  tl.fromTo(".sec-5-t1", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t1", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t2", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t2", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t3", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t3", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t4", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t4", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t5", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t5", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t6", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t6", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t7", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
+    .to(".sec-5-t7", { autoAlpha: 0, duration: 0.4 })
+    .fromTo(".sec-5-t8", { autoAlpha: 0, duration: 0.4 }, { autoAlpha: 1, y: 0, duration: 1.2 });
+}
+
+function initscrollani() {
+  sec_3_scrollTrigger__init();
+  sec_5_scrollTrigger__init();
+}
+window.addEventListener("DOMContentLoaded", initscrollani);
+window.addEventListener("load", () => {
+  ScrollTrigger.refresh();
+});
+window.addEventListener("resize", () => {
+  ScrollTrigger.refresh();
+});
