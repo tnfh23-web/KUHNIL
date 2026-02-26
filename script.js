@@ -92,9 +92,9 @@ $(".tab-btn li").on("click", function (e) {
 function sec_5_scrollTrigger__init() {
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".sec-5",
+      trigger: ".sec-5-text-con-box",
       start: "top top",
-      end: () => "+=" + window.innerHeight * 4,
+      end: () => "+=" + window.innerHeight * 5,
       pin: ".sec-5-text-con-box",
       pinSpacing: true,
       scrub: 1,
@@ -103,7 +103,7 @@ function sec_5_scrollTrigger__init() {
     },
   });
 
-  tl.set(".sec-5 .img-box", { y: () => -(window.innerHeight * 4) }, 0);
+  tl.set(".sec-5 .img-box", { y: () => -(window.innerHeight * 5) }, 0);
 
   tl.set(".sec-5-text-box", { autoAlpha: 0 });
 

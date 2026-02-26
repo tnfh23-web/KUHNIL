@@ -514,6 +514,7 @@ body {
 .sec-5 {
   width: 100%;
   height: 100%;
+  max-height: 5550px;
   z-index: 6;
 }
 .sec-5 .sec-5-grid {
@@ -522,6 +523,7 @@ body {
 }
 .sec-5 .sec-5-wrap {
   position: relative;
+  max-height: 5550px;
 }
 .sec-5 .sec-5-grid .sec-5-text-con-box {
   display: flex;
@@ -580,6 +582,10 @@ body {
   height: 40.2rem;
 }
 .sec-5-grid .button-box {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -617,6 +623,9 @@ body {
 }
 /* 섹션 5 끝 */
 /* 풋터 시작 */
+footer {
+  margin-top: 100px;
+}
 .footer-grid {
   max-width: var(--maxwidth);
   margin: 0 auto;
