@@ -131,7 +131,14 @@ function initscrollani() {
 window.addEventListener("DOMContentLoaded", initscrollani);
 window.addEventListener("load", () => {
   ScrollTrigger.refresh();
+  if (window.AOS) AOS.refreshHard();
 });
+
 window.addEventListener("resize", () => {
   ScrollTrigger.refresh();
+  if (window.AOS) AOS.refreshHard();
+});
+
+ScrollTrigger.addEventListener("refresh", () => {
+  if (window.AOS) AOS.refreshHard();
 });
