@@ -1,9 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>건일제약</title>
+    <script>
+      (() => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches || location.hash) return;
+        const restoration = history.scrollRestoration;
+        history.scrollRestoration = 'manual';
+        document.documentElement.classList.add('is-kuhnil-loading');
+        const fallback = setTimeout(() => {
+          document.documentElement.classList.remove('is-kuhnil-loading');
+          document.dispatchEvent(new Event('kuhnil:load-fallback'));
+          history.scrollRestoration = restoration;
+        }, 8000);
+        document.addEventListener('kuhnil:ready', () => {
+          clearTimeout(fallback); history.scrollRestoration = restoration;
+        }, { once: true });
+      })();
+    </script>
+
     <!-- aos -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <!-- 베리어블 -->
@@ -14,9 +31,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- 폰트어썸 불러오기 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link rel="stylesheet" href="additions.css?v=content-11" />
+    <link rel="stylesheet" href="responsive.css?v=responsive-5" />
   </head>
 
   <body>
+    <div class="kuhnil-loader" role="status" aria-live="polite"><span class="kuhnil-sr-only">건일제약 페이지를 준비하고 있습니다.</span></div>
     <header class="top-bar">
       <div class="container">
         <div class="logo-box">
@@ -25,6 +45,7 @@
         <ul class="text-box">
           <li><a href="#">기업소개</a></li>
           <li><a href="#">제품소개</a></li>
+          <li><a href="#">생산시설</a></li>
           <li><a href="#">연구분야</a></li>
           <li><a href="#">연혁</a></li>
         </ul>
@@ -39,8 +60,39 @@
         </div>
 
         <div class="text-box">
-          <p data-aos="fade-up" data-aos-offset="0" data-aos-duration="1200" data-aos-delay="0">깨끗한 공간에서 태어나는 정직한 기술</p>
-          <p data-aos="fade-up" data-aos-offset="0" data-aos-duration="1200" data-aos-delay="500">56년의 신뢰, 건일제약이 지켜온 가치</p>
+          <p>깨끗한 공간에서 태어나는 정직한 기술</p>
+          <p>56년의 신뢰, 건일제약이 지켜온 가치</p>
+        </div>
+      </section>
+      <section class="kuhnil-vision kuhnil-added" aria-labelledby="kuhnil-vision-title">
+        <div class="kuhnil-added-grid">
+          <div class="kuhnil-vision-intro">
+            <h2 id="kuhnil-vision-title" data-added-reveal>KUHNIL VISION</h2>
+            <p class="kuhnil-vision-statement" data-added-reveal>마음이 건강한 사람들,<br />더 나은 삶을 향한 연구.</p>
+            <p class="kuhnil-vision-copy" data-added-reveal>생명과 건강을 지키고 삶의 질을 높이는 새로운 가치를 만듭니다.<br />연구개발부터 생산, 글로벌 협력까지 건일제약의 역량을 연결합니다.</p>
+          </div>
+          <div class="kuhnil-capabilities">
+            <article class="kuhnil-capability" data-added-reveal>
+              <img src="img/vision/research.jpg" alt="" loading="lazy" />
+              <h3><button type="button" aria-expanded="false" aria-controls="vision-detail-1"><span>핵심 기술</span></button></h3>
+              <div class="kuhnil-capability-detail" id="vision-detail-1" aria-hidden="true"><p>신약개발에 필요한 다양한 핵심 기술을 바탕으로 연구합니다.</p></div>
+            </article>
+            <article class="kuhnil-capability" data-added-reveal>
+              <img src="img/vision/clinical.jpg" alt="" loading="lazy" />
+              <h3><button type="button" aria-expanded="false" aria-controls="vision-detail-2"><span>글로벌 임상</span></button></h3>
+              <div class="kuhnil-capability-detail" id="vision-detail-2" aria-hidden="true"><p>새로운 의약품 개발을 위한 글로벌 임상을 진행합니다.</p></div>
+            </article>
+            <article class="kuhnil-capability" data-added-reveal>
+              <img src="img/vision/network.jpg" alt="" loading="lazy" />
+              <h3><button type="button" aria-expanded="false" aria-controls="vision-detail-3"><span>유통 네트워크</span></button></h3>
+              <div class="kuhnil-capability-detail" id="vision-detail-3" aria-hidden="true"><p>다국적 제약사들과 협력하며 전 세계 유통 네트워크를 구축합니다.</p></div>
+            </article>
+            <article class="kuhnil-capability" data-added-reveal>
+              <img src="img/vision/production.jpg" alt="" loading="lazy" />
+              <h3><button type="button" aria-expanded="false" aria-controls="vision-detail-4"><span>생산 역량</span></button></h3>
+              <div class="kuhnil-capability-detail" id="vision-detail-4" aria-hidden="true"><p>글로벌 제약사와의 의약품 위탁생산 경험을 축적하고 있습니다.</p></div>
+            </article>
+          </div>
         </div>
       </section>
       <section class="sec-2">
@@ -90,6 +142,26 @@
                 </div>
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+      <section class="kuhnil-products kuhnil-added" aria-labelledby="kuhnil-products-title">
+        <div class="kuhnil-added-grid kuhnil-product-grid">
+          <div class="kuhnil-product-copy">
+            <h2 id="kuhnil-products-title" data-added-reveal>KUHNIL PRODUCT</h2>
+            <p data-added-reveal>건일제약은 사람을 위한 기술,<br />신뢰를 담은 의약품을 만듭니다.</p>
+            <a class="kuhnil-more" href="#" data-added-reveal><span>View More</span></a>
+          </div>
+          <div class="kuhnil-product-gallery" data-added-reveal>
+            <div class="kuhnil-product-slider swiper" role="region" aria-label="건일제약 대표 제품">
+              <div class="swiper-wrapper">
+                <figure class="swiper-slide"><img src="img/new-content/omacor.png" alt="오마코연질캡슐 제품 패키지" width="600" height="600" /><figcaption><span>의약품 · 순환기계</span><h3>오마코연질캡슐</h3></figcaption></figure>
+                <figure class="swiper-slide"><img src="img/new-content/rosumega.png" alt="로수메가연질캡슐 제품 패키지" width="600" height="600" /><figcaption><span>의약품 · 순환기계</span><h3>로수메가연질캡슐</h3></figcaption></figure>
+                <figure class="swiper-slide"><img src="img/new-content/circadin.png" alt="서카딘서방정 2mg 제품 패키지" width="600" height="600" /><figcaption><span>의약품 · 신경·정신계</span><h3>서카딘서방정 2mg</h3></figcaption></figure>
+                <figure class="swiper-slide"><img src="img/new-content/bioflor.png" alt="비오플 250캡슐 제품 패키지" width="600" height="600" /><figcaption><span>의약품 · 소화기계</span><h3>비오플 250캡슐</h3></figcaption></figure>
+              </div>
+            </div>
+            <div class="kuhnil-product-pagination" aria-label="제품 선택"></div>
           </div>
         </div>
       </section>
@@ -158,6 +230,8 @@
       <section class="sec-5">
         <div class="sec-5-grid">
           <div class="sec-5-wrap">
+            <div class="history-stage">
+              <div class="history-rail" aria-hidden="true"><span class="history-rail-fill"></span></div>
             <div class="sec-5-text-con-box">
               <div class="sec-5-text-box sec-5-t1">
                 <h2 class="sec-5-text-1">2022</h2>
@@ -199,6 +273,7 @@
               <img class="sec-5-img-left sec-5-img-5" src="img/sec_5/sec_5_img_5.png" alt="sec_5_img" />
               <img class="sec-5-img-right sec-5-img-6" src="img/sec_5/sec_5_img_6.png" alt="sec_5_img" />
               <img class="sec-5-img-left sec-5-img-7" src="img/sec_5/sec_5_img_7.png" alt="sec_5_img" />
+            </div>
             </div>
             <div class="button-box">
               <div class="button"><a href="#">View More</a></div>
@@ -244,6 +319,7 @@
     <!-- 스크롤 스무서  -->
     <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <!-- 스크립트 -->
-    <script src="script.js"></script>
+    <script src="script.js?v=responsive-6"></script>
+    <script src="additions.js?v=content-11"></script>
   </body>
 </html>

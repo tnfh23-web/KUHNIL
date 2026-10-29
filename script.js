@@ -1,144 +1,195 @@
-// 스크롤 트리거 플러그인 활성화
 gsap.registerPlugin(ScrollTrigger);
 
-/* =========================================================
-   Lenis (Smooth Scroll)
-========================================================= */
+const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+const stickySceneQuery = matchMedia('(max-width: 900px), (pointer: coarse)');
 let lenis = null;
+let lenisTick = null;
+let refreshFrame = 0;
+let sceneWidth = 0;
+const sceneControllers = [];
+const needsFlowScene = (minHeight = 520) => motionQuery.matches || (stickySceneQuery.matches && (parseFloat(document.documentElement.style.getPropertyValue("--scene-height")) || innerHeight) < minHeight);
 
-if (window.Lenis) {
-  lenis = new Lenis({
-    lerp: 0.06,
-    wheelMultiplier: 1.2,
-    smoothWheel: true,
-    smoothTouch: false,
-  });
+// Keep touch scenes stable while browser toolbars change the visible height.
+// A real width change (rotation or breakpoint change) measures the scene again.
+function updateSceneHeight(force = false) {
+  const root = document.documentElement;
+  if (!stickySceneQuery.matches) {
+    root.style.removeProperty('--scene-height'); sceneWidth = innerWidth; return;
+  }
+  if (!force && sceneWidth === innerWidth && root.style.getPropertyValue('--scene-height')) return;
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;height:100vh;';
+  if (CSS.supports('height', '100svh')) probe.style.height = '100svh';
+  document.body.append(probe);
+  const height = probe.offsetHeight;
+  probe.remove();
+  root.style.setProperty('--scene-height', `${height}px`);
+  sceneWidth = innerWidth;
+}
 
-  // Lenis <-> ScrollTrigger sync
-  lenis.on("scroll", ScrollTrigger.update);
-
-  // GSAP ticker에 Lenis 연결
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
+function configureSmoothScroll() {
+  if (lenisTick) gsap.ticker.remove(lenisTick);
+  lenis?.destroy(); lenis = null; lenisTick = null;
+  if (!window.Lenis || motionQuery.matches) return;
+  lenis = new Lenis({ lerp: .06, wheelMultiplier: 1.2, smoothWheel: !matchMedia('(pointer: coarse)').matches, smoothTouch: false });
+  lenis.on('scroll', ScrollTrigger.update);
+  lenisTick = time => lenis?.raf(time * 1000);
+  gsap.ticker.add(lenisTick);
   gsap.ticker.lagSmoothing(0);
+}
+configureSmoothScroll();
+ScrollTrigger.addEventListener('refresh', () => lenis?.resize());
 
-  // refresh 시 Lenis 사이즈 재계산
-  ScrollTrigger.addEventListener("refresh", () => lenis.resize());
+function requestLayoutRefresh() {
+  cancelAnimationFrame(refreshFrame);
+  refreshFrame = requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+    window.AOS?.refresh();
+  });
 }
 
-// sec-2 scroll-text gsap
-gsap.to(".sec-2-scroll-text", {
-  "--hlw": "224px",
-  duration: 0.9,
-  ease: "power2.out",
-  scrollTrigger: {
-    trigger: ".sec-2-scroll-text",
-    start: "top 80%",
-    toggleActions: "play none none reverse",
-  },
+// Facility emphasis follows the measured text width at every breakpoint.
+gsap.to('.sec-2-scroll-text', {
+  '--hlw': '100%', duration: .9, ease: 'power2.out',
+  scrollTrigger: { trigger: '.sec-2-scroll-text', start: 'top 80%', toggleActions: 'play none none reverse' },
 });
-// sec-3 gsap ------------------------------ //
+
 function sec_3_scrollTrigger__init() {
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".sec-3 .content-wrap",
-      start: "top top",
-      end: "+=400%",
-      pin: true,
-      scrub: 1,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-    },
-  });
-
-  tl.set(".sec-3-text", { opacity: 0 });
-
-  tl.to(".sec-3 .bg-container img", {
-    scale: 1,
-    ease: "none",
-    duration: 1,
-  });
-
-  // 2) 텍스트 시퀀스 (bg 커진 다음 이어서)
-  tl.fromTo(".t1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 })
-    .to(".t1", { opacity: 0, duration: 0.4 })
-
-    .fromTo(".t2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 })
-    .to(".t2", { opacity: 0, duration: 0.4 })
-
-    .fromTo(".t3", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 })
-    .to(".t3", { opacity: 0, duration: 0.4 })
-
-    .fromTo(".t4", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 })
-    .to(".t4", { opacity: 0, duration: 0.4 });
+  const section = document.querySelector('.sec-3');
+  const stage = section.querySelector('.content-wrap');
+  const image = section.querySelector('.bg-container img');
+  const texts = [...section.querySelectorAll('.sec-3-text')];
+  let timeline = null;
+  function setup() {
+    timeline?.scrollTrigger?.kill(); timeline?.kill();
+    gsap.set([image, ...texts], { clearProps: 'opacity,transform' });
+    updateSceneHeight();
+    if (needsFlowScene()) { section.dataset.sceneMode = 'static'; return; }
+    const sticky = stickySceneQuery.matches;
+    section.dataset.sceneMode = sticky ? 'sticky' : 'pinned';
+    const settings = {
+      trigger: sticky ? section : stage, start: 'top top',
+      end: () => '+=' + (sticky ? section.offsetHeight - stage.offsetHeight : stage.offsetHeight * 4),
+      scrub: sticky ? .5 : 1, invalidateOnRefresh: true,
+    };
+    if (!sticky) Object.assign(settings, { pin: stage, anticipatePin: 1 });
+    timeline = gsap.timeline({ scrollTrigger: settings });
+    timeline.set(texts, { opacity: 0 });
+    timeline.fromTo(image, { scale: sticky ? .85 : .6 }, { scale: 1, duration: 1, ease: 'none' });
+    texts.forEach(text => {
+      timeline.fromTo(text, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 })
+        .to(text, { opacity: 0, duration: .4 });
+    });
+  }
+  stickySceneQuery.addEventListener('change', () => { updateSceneHeight(true); setup(); requestLayoutRefresh(); });
+  motionQuery.addEventListener('change', () => { setup(); requestLayoutRefresh(); });
+  sceneControllers.push(setup);
+  setup();
 }
-// sec-4 tab
 
-$(".tab-btn li").on("click", function (e) {
-  e.preventDefault();
+function initResearchTabs() {
+  $('.tab-btn li').on('click', function (event) {
+    event.preventDefault();
+    const index = $(this).index();
+    $('.tab-btn li').removeClass('active');
+    $(this).addClass('active');
+    $('.tab-list-box').removeClass('active').eq(index).addClass('active');
+    requestLayoutRefresh();
+  });
+}
 
-  const idx = $(this).index();
-
-  // 탭 active
-  $(".tab-btn li").removeClass("active");
-  $(this).addClass("active");
-
-  // 탭 전환
-  $(".tab-list-box").removeClass("active").eq(idx).addClass("active");
-});
-
-// sec-5 gsap
 function sec_5_scrollTrigger__init() {
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".sec-5-text-con-box",
-      start: "top top",
-      end: () => "+=" + window.innerHeight * 5,
-      pin: ".sec-5-text-con-box",
-      pinSpacing: true,
-      scrub: 1,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-    },
+  const section = document.querySelector('.sec-5');
+  const stage = section.querySelector('.history-stage');
+  const track = stage.querySelector('.img-box');
+  const photos = [...track.querySelectorAll('img')];
+  const stack = stage.querySelector('.sec-5-text-con-box');
+  const events = [...stack.querySelectorAll('.sec-5-text-box')];
+  const fill = stage.querySelector('.history-rail-fill');
+  const list = document.createElement('ol'); list.className = 'history-accessible';
+  events.forEach((event,index) => {
+    const item = document.createElement('li');
+    if (photos[index]) {
+      const picture = photos[index].cloneNode();
+      picture.removeAttribute('class'); picture.alt = `${event.querySelector('h2').textContent}년 연혁 관련 이미지`;
+      picture.loading = 'lazy'; picture.width = 465; picture.height = 402; item.append(picture);
+    }
+    const title = document.createElement('h3'); title.textContent = event.querySelector('h2').textContent; item.append(title);
+    const detail = event.querySelector('.sec-5-text-2');
+    if (detail) { const copy = document.createElement('p'); copy.textContent = detail.textContent; item.append(copy); }
+    list.append(item);
   });
-
-  tl.set(".sec-5 .img-box", { y: () => -(window.innerHeight * 5) }, 0);
-
-  tl.set(".sec-5-text-box", { autoAlpha: 0 });
-
-  tl.fromTo(".sec-5-t1", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t1", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t2", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t2", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t3", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t3", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t4", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t4", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t5", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t5", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t6", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t6", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t7", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.2 })
-    .to(".sec-5-t7", { autoAlpha: 0, duration: 0.4 })
-    .fromTo(".sec-5-t8", { autoAlpha: 0, duration: 0.4 }, { autoAlpha: 1, y: 0, duration: 1.2 });
+  section.prepend(list);
+  let timeline = null, centers = [], anchor = 0;
+  const state = { frame: 0 };
+  function measure() {
+    centers = photos.map(photo => photo.offsetTop + photo.offsetHeight / 2);
+    anchor = stage.clientHeight * (stickySceneQuery.matches ? .25 : .36);
+    const clearance = Math.max(...events.map(event => event.offsetHeight)) / 2 + 24;
+    stage.style.setProperty('--history-clearance', `${clearance}px`);
+  }
+  function render() {
+    const position = Math.max(0, Math.min(events.length - 1, state.frame));
+    const first = Math.floor(position);
+    const fraction = Math.max(0, Math.min(1, (position - first - .22) / .56));
+    const centerAt = index => centers[index] === undefined ? centers[centers.length - 1] + stage.clientHeight * .85 : centers[index];
+    const center = centerAt(first) + (centerAt(Math.min(first + 1, events.length - 1)) - centerAt(first)) * fraction;
+    gsap.set(track, { y: anchor - center });
+    const visibleRange = stickySceneQuery.matches ? .25 : .32;
+    events.forEach((event,index) => {
+      const opacity = Math.max(0, Math.min(1, (visibleRange - Math.abs(position - index)) / .12));
+      event.style.opacity = opacity; event.style.visibility = opacity > 0 ? 'visible' : 'hidden';
+    });
+    fill.style.transform = `scaleY(${.08 + .92 * position / (events.length - 1)})`;
+  }
+  function setup() {
+    timeline?.scrollTrigger?.kill(); timeline?.kill();
+    gsap.set(track, { clearProps: 'transform' });
+    events.forEach(event => { event.style.removeProperty('opacity'); event.style.removeProperty('visibility'); event.style.removeProperty('transform'); });
+    updateSceneHeight();
+    stack.setAttribute('aria-hidden', 'true'); track.setAttribute('aria-hidden', 'true');
+    if (needsFlowScene(640)) { section.dataset.historyMode = 'static'; return; }
+    const sticky = stickySceneQuery.matches;
+    section.dataset.historyMode = sticky ? 'sticky' : 'animated';
+    state.frame = 0; measure(); render();
+    const settings = {
+      trigger: sticky ? section.querySelector('.sec-5-wrap') : stage, start: 'top top',
+      end: () => '+=' + (sticky ? section.querySelector('.sec-5-wrap').offsetHeight - stage.offsetHeight : stage.offsetHeight * 5),
+      scrub: sticky ? .5 : 1, invalidateOnRefresh: true, onRefreshInit: measure, onRefresh: render,
+    };
+    if (!sticky) Object.assign(settings, { pin: stage, pinSpacing: true, anticipatePin: 1 });
+    timeline = gsap.timeline({ scrollTrigger: settings })
+      .to(state, { frame: events.length - 1, duration: events.length - 1, ease: 'none', onUpdate: render });
+  }
+  stickySceneQuery.addEventListener('change', () => { updateSceneHeight(true); setup(); requestLayoutRefresh(); });
+  motionQuery.addEventListener('change', () => { setup(); requestLayoutRefresh(); });
+  sceneControllers.push(setup);
+  setup();
 }
 
+function syncHeroVideo() {
+  const video = document.querySelector('.sec-1 video');
+  if (motionQuery.matches) video.pause();
+  else video.play().catch(() => {});
+}
 function initscrollani() {
-  sec_3_scrollTrigger__init();
-  sec_5_scrollTrigger__init();
+  updateSceneHeight(true);
+  sec_3_scrollTrigger__init(); sec_5_scrollTrigger__init(); initResearchTabs(); syncHeroVideo();
 }
-window.addEventListener("DOMContentLoaded", initscrollani);
-window.addEventListener("load", () => {
-  ScrollTrigger.refresh();
-  if (window.AOS) AOS.refreshHard();
-});
-
-window.addEventListener("resize", () => {
-  ScrollTrigger.refresh();
-  if (window.AOS) AOS.refreshHard();
-});
-
-ScrollTrigger.addEventListener("refresh", () => {
-  if (window.AOS) AOS.refreshHard();
-});
+window.addEventListener('DOMContentLoaded', initscrollani);
+window.addEventListener('load', requestLayoutRefresh);
+document.fonts?.ready.then(requestLayoutRefresh);
+motionQuery.addEventListener('change', () => { configureSmoothScroll(); syncHeroVideo(); requestLayoutRefresh(); });
+let lastWidth = innerWidth, lastHeight = innerHeight, resizeTimer = 0;
+window.addEventListener('resize', () => {
+  const widthChanged = innerWidth !== lastWidth;
+  const heightChanged = Math.abs(innerHeight - lastHeight) > 1;
+  if (!widthChanged && (stickySceneQuery.matches || !heightChanged)) return;
+  lastWidth = innerWidth; lastHeight = innerHeight;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    updateSceneHeight();
+    if (widthChanged) sceneControllers.forEach(setup => setup());
+    requestLayoutRefresh();
+  }, 180);
+}, { passive: true });
