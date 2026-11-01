@@ -6,7 +6,7 @@
     <title>건일제약</title>
     <script>
       (() => {
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches || location.hash) return;
+        if (location.hash) return;
         const restoration = history.scrollRestoration;
         history.scrollRestoration = 'manual';
         document.documentElement.classList.add('is-kuhnil-loading');
@@ -31,8 +31,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- 폰트어썸 불러오기 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-    <link rel="stylesheet" href="additions.css?v=content-11" />
-    <link rel="stylesheet" href="responsive.css?v=responsive-5" />
+    <link rel="stylesheet" href="additions.css?v=motion-20261101" />
+    <link rel="stylesheet" href="responsive.css?v=motion-20261101" />
   </head>
 
   <body>
@@ -319,7 +319,7 @@
     <!-- 스크롤 스무서  -->
     <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <!-- 스크립트 -->
-    <script src="script.js?v=responsive-6"></script>
-    <script src="additions.js?v=content-11"></script>
+    <script src="script.js?v=motion-20261101"></script>
+    <script src="additions.js?v=motion-20261101"></script>
   </body>
 </html>

@@ -152,9 +152,7 @@
   .sec-5 .history-stage .img-box { gap: 5rem; }
 
 }
-@media (prefers-reduced-motion: reduce) {
-  .kuhnil-added *, .kuhnil-more::before { transition: none !important; }
-}
+
 
 .kuhnil-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .kuhnil-loader { display: none; }
@@ -168,9 +166,7 @@ html.is-kuhnil-loading { overflow: hidden; }
 .hero-word { display: inline-block; white-space: nowrap; overflow: hidden; padding: .08em .02em .14em; margin: -.08em -.02em -.14em; vertical-align: bottom; }
 .hero-character { display: inline-block; }
 .is-kuhnil-loading .hero-character { will-change: transform,opacity; }
-@media (prefers-reduced-motion: reduce) {
-  .kuhnil-capability, .kuhnil-capability-detail { transition: none !important; }
-}
+
 
 .kuhnil-capabilities:not([data-accordion-ready="true"]) .kuhnil-capability-detail { grid-template-rows: 1fr; width: auto; opacity: 1; }
 .kuhnil-capabilities:not([data-accordion-ready="true"]) .kuhnil-capability-detail > p { padding-top: 1.6rem; }

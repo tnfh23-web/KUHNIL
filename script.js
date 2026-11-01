@@ -1,13 +1,14 @@
 gsap.registerPlugin(ScrollTrigger);
 
-const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+// Preserve the site's motion independently of operating-system preferences.
+const motionPreferences = { reduce: false };
 const stickySceneQuery = matchMedia('(max-width: 900px), (pointer: coarse)');
 let lenis = null;
 let lenisTick = null;
 let refreshFrame = 0;
 let sceneWidth = 0;
 const sceneControllers = [];
-const needsFlowScene = (minHeight = 520) => motionQuery.matches || (stickySceneQuery.matches && (parseFloat(document.documentElement.style.getPropertyValue("--scene-height")) || innerHeight) < minHeight);
+const needsFlowScene = (minHeight = 520) => motionPreferences.reduce || (stickySceneQuery.matches && (parseFloat(document.documentElement.style.getPropertyValue("--scene-height")) || innerHeight) < minHeight);
 
 // Keep touch scenes stable while browser toolbars change the visible height.
 // A real width change (rotation or breakpoint change) measures the scene again.
@@ -30,7 +31,7 @@ function updateSceneHeight(force = false) {
 function configureSmoothScroll() {
   if (lenisTick) gsap.ticker.remove(lenisTick);
   lenis?.destroy(); lenis = null; lenisTick = null;
-  if (!window.Lenis || motionQuery.matches) return;
+  if (!window.Lenis || motionPreferences.reduce) return;
   lenis = new Lenis({ lerp: .06, wheelMultiplier: 1.2, smoothWheel: !matchMedia('(pointer: coarse)').matches, smoothTouch: false });
   lenis.on('scroll', ScrollTrigger.update);
   lenisTick = time => lenis?.raf(time * 1000);
@@ -82,7 +83,6 @@ function sec_3_scrollTrigger__init() {
     });
   }
   stickySceneQuery.addEventListener('change', () => { updateSceneHeight(true); setup(); requestLayoutRefresh(); });
-  motionQuery.addEventListener('change', () => { setup(); requestLayoutRefresh(); });
   sceneControllers.push(setup);
   setup();
 }
@@ -162,14 +162,13 @@ function sec_5_scrollTrigger__init() {
       .to(state, { frame: events.length - 1, duration: events.length - 1, ease: 'none', onUpdate: render });
   }
   stickySceneQuery.addEventListener('change', () => { updateSceneHeight(true); setup(); requestLayoutRefresh(); });
-  motionQuery.addEventListener('change', () => { setup(); requestLayoutRefresh(); });
   sceneControllers.push(setup);
   setup();
 }
 
 function syncHeroVideo() {
   const video = document.querySelector('.sec-1 video');
-  if (motionQuery.matches) video.pause();
+  if (motionPreferences.reduce) video.pause();
   else video.play().catch(() => {});
 }
 function initscrollani() {
@@ -179,7 +178,6 @@ function initscrollani() {
 window.addEventListener('DOMContentLoaded', initscrollani);
 window.addEventListener('load', requestLayoutRefresh);
 document.fonts?.ready.then(requestLayoutRefresh);
-motionQuery.addEventListener('change', () => { configureSmoothScroll(); syncHeroVideo(); requestLayoutRefresh(); });
 let lastWidth = innerWidth, lastHeight = innerHeight, resizeTimer = 0;
 window.addEventListener('resize', () => {
   const widthChanged = innerWidth !== lastWidth;

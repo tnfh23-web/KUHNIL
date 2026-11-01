@@ -1,6 +1,5 @@
 /* Existing GSAP, ScrollTrigger, Swiper and Lenis are reused throughout. */
 (() => {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const productRoot = document.querySelector('.kuhnil-product-slider');
   if (window.Swiper && productRoot) {
     const names = [...productRoot.querySelectorAll('h3')].map(title => title.textContent);
@@ -12,7 +11,7 @@
       });
     };
     const slider = new Swiper(productRoot, {
-      slidesPerView: 1, effect: 'fade', fadeEffect: { crossFade: true }, speed: reduce.matches ? 0 : 850, loop: true,
+      slidesPerView: 1, effect: 'fade', fadeEffect: { crossFade: true }, speed: motionPreferences.reduce ? 0 : 850, loop: true,
       pagination: {
         el: document.querySelector('.kuhnil-product-pagination'), clickable: true,
         renderBullet: (index,className) => `<button type="button" class="${className}" aria-label="${names[index]} 보기"></button>`,
@@ -20,7 +19,6 @@
       a11y: { paginationBulletMessage: '{{index}}번 제품 보기' },
       on: { init: syncProduct, slideChange: syncProduct, paginationUpdate: syncProduct },
     });
-    reduce.addEventListener('change',()=>{slider.params.speed=reduce.matches?0:850;});
   }
 
   const accordion = document.querySelector('.kuhnil-capabilities');
@@ -85,7 +83,7 @@
     function setup(){
       scrollTrigger?.kill();timeline?.kill();
       gsap.set(targets,{clearProps:'opacity,transform,clipPath'});
-      if(reduce.matches||targets.every(target=>target.dataset.revealed==='true'))return;
+      if(motionPreferences.reduce||targets.every(target=>target.dataset.revealed==='true'))return;
       timeline=gsap.timeline({paused:true,onComplete:()=>targets.forEach(target=>target.dataset.revealed='true')});
       targets.forEach((target,index)=>{
         timeline.fromTo(target,fadeOnly?{opacity:0}:{opacity:0,y:22},
@@ -103,7 +101,6 @@
   revealGroup([...productCopy.querySelectorAll('[data-added-reveal]')],productCopy,{fadeOnly:true});
   const productGallery=document.querySelector('.kuhnil-product-gallery');
   revealGroup([productGallery],productGallery,{fadeOnly:true,delay:.12});
-  reduce.addEventListener('change',()=>revealSetups.forEach(setup=>setup()));
 
   function initHeroLoader(){
     const root=document.documentElement;
@@ -127,14 +124,12 @@
       window.removeEventListener('wheel',blockScroll);window.removeEventListener('touchmove',blockScroll);
       window.removeEventListener('keydown',blockKeys,true);window.removeEventListener('resize',onResize);
       document.removeEventListener('kuhnil:load-fallback',finish);
-      reduce.removeEventListener('change',onMotion);
       if(typeof lenis!=='undefined')lenis?.start();
       document.dispatchEvent(new Event('kuhnil:ready'));requestLayoutRefresh();
     }
     const onResize=()=>{if(innerWidth!==startingWidth)finish();};
-    const onMotion=()=>{if(reduce.matches)finish();};
     document.addEventListener('kuhnil:load-fallback',finish,{once:true});
-    window.addEventListener('resize',onResize);reduce.addEventListener('change',onMotion);
+    window.addEventListener('resize',onResize);
     window.addEventListener('wheel',blockScroll,{passive:false});window.addEventListener('touchmove',blockScroll,{passive:false});
     window.addEventListener('keydown',blockKeys,true);
     document.body.setAttribute('aria-busy','true');locked.forEach(({node})=>node.inert=true);

@@ -5,13 +5,13 @@
 | `index.html` | Original sections and research markup, added vision/product content, loading overlay and boot fallback. Placeholder menu/View More destinations remain by request. |
 | `variable.css` | Existing brand palette and maximum container width. |
 | `style.css` | Original desktop styling, unchanged. |
-| `script.js` | Existing Lenis integration and facility emphasis; responsive building/history scenes with shared history progress, stable touch height and static short-screen/reduced-motion modes. Research keeps its original click tabs. |
+| `script.js` | Existing Lenis integration and facility emphasis; responsive building/history scenes with shared history progress, stable touch height and static short-screen mode. Research keeps its original click tabs. |
 | `additions.css` | Shared section type/buttons, vision expanding cards, product presentation and hero loading styles. |
 | `additions.js` | Vision hover/tap/keyboard accordion, product crossfade and viewport-triggered entrances, centered character reveal transferring the real hero text to its original position. Loading locks and restores input with a fallback. |
 | `responsive.css` | Page gutters, fluid facility images, tablet/mobile layout, touch-readable equipment captions, sticky scenes and small-screen footer. Research changes apply only below 1100px. |
 
 ## Flow
-The page retains its existing GSAP/ScrollTrigger, Swiper and Lenis dependencies. `script.js` owns scrolling and original scene controllers; `additions.js` owns added content and loading. Desktop scenes use pinning; touch/narrow scenes use CSS sticky tracks. Height-only touch resize preserves the scene height; width changes remeasure it. Reduced motion and very short screens present scene information in normal flow.
+The page retains its existing GSAP/ScrollTrigger, Swiper and Lenis dependencies. `script.js` owns scrolling and original scene controllers; `additions.js` owns added content and loading. Desktop scenes use pinning; touch/narrow scenes use CSS sticky tracks. Height-only touch resize preserves the scene height; width changes remeasure it. Very short screens present scene information in normal flow. Animation runs independently of OS motion preferences.
 
 Research HTML and desktop design match the original project. Vision photos are separate from existing research/history assets. Asset origins are listed in `content-sources.md`.
 

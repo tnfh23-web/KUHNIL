@@ -165,11 +165,7 @@ footer { margin-top: 8rem; }
   .sec-2-grid .img-box .img-right-box { padding-top: 0; }
   .sec-2-grid .img-box img { aspect-ratio: 16 / 10; }
 }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; }
-  [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .tab-list-box, .top-bar, .sec-2-grid .img-box a, .sec-2-grid .img-box a::before, .hover-text-box { transition: none !important; }
-}
+
 
 @media (max-width: 1100px) {
   .sec-4-grid { width: calc(100% - var(--page-gutter) * 2); padding: var(--section-space) 0; box-sizing: border-box; }
