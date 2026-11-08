@@ -18,3 +18,9 @@ These illustrate the capability categories; they are not presented as photograph
 | `img/vision/clinical.jpg` | Vitaly Gariev — https://unsplash.com/photos/doctor-consulting-with-an-elderly-patient-in-an-office-Ey-IxmbZ5TQ |
 | `img/vision/network.jpg` | Rafael Rodrigues — https://www.pexels.com/photo/busy-container-port-with-stacked-shipping-containers-36652830/ |
 | `img/vision/production.jpg` | Elements Interactive — https://www.pexels.com/photo/pharmaceutical-workers-in-a-production-line-37466061/ |
+
+## History ending image
+
+`img/sec_5/history-ending-upscaled.webp` is an AI-assisted upscale/restoration of the user-provided `img/sec_5/sec_5_img_7.png` (942×480 → 1758×894), made with the built-in imagegen tool. Fine detail is reconstructed, rather than recovered from a higher-resolution photographic original. The original file is retained. The selected image was encoded as WebP (quality 88, 362,586 bytes) for the last history thumbnail and full-screen ending, sharing one browser resource.
+
+Prompt direction: strictly preserve the original wide composition, buildings, stone arch, engraved marks, plain black canopy and ordinary green foliage; reduce compression and sharpen natural edges; add no people, logos, signage, gardens or decorative objects. Reference for the expansion motion: https://r00neyj.github.io/YoungPoongPrecision_redesign/ — motion only, no reference assets or wording copied.
