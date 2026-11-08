@@ -121,32 +121,64 @@ function sec_5_scrollTrigger__init() {
     list.append(item);
   });
   section.prepend(list);
-  let timeline = null, centers = [], anchor = 0;
+  let timeline = null, centers = [], photoHeights = [], textTops = [], anchor = 0, active = -1;
   const state = { frame: 0 };
+  const rendered = events.map(() => ({ opacity: null, y: null }));
+  const smoothstep = value => value * value * (3 - 2 * value);
   function measure() {
     centers = photos.map(photo => photo.offsetTop + photo.offsetHeight / 2);
-    anchor = stage.clientHeight * (stickySceneQuery.matches ? .25 : .36);
+    photoHeights = photos.map(photo => photo.offsetHeight);
+    textTops = events.map(event => (stage.clientHeight - event.offsetHeight) / 2);
+    // Photos meet the text on desktop; narrow screens keep a clear photo lane above it.
+    anchor = stage.clientHeight * (stickySceneQuery.matches ? .25 : .5);
     const clearance = Math.max(...events.map(event => event.offsetHeight)) / 2 + 24;
     stage.style.setProperty('--history-clearance', `${clearance}px`);
   }
   function render() {
-    const position = Math.max(0, Math.min(events.length - 1, state.frame));
-    const first = Math.floor(position);
-    const fraction = Math.max(0, Math.min(1, (position - first - .22) / .56));
+    const progress = Math.max(0, Math.min(1, state.frame / (events.length - 1)));
     const centerAt = index => centers[index] === undefined ? centers[centers.length - 1] + stage.clientHeight * .85 : centers[index];
-    const center = centerAt(first) + (centerAt(Math.min(first + 1, events.length - 1)) - centerAt(first)) * fraction;
-    gsap.set(track, { y: anchor - center });
-    const visibleRange = stickySceneQuery.matches ? .25 : .32;
+    const center = centerAt(0) + (centerAt(events.length - 1) - centerAt(0)) * progress;
+    let first = 0;
+    while (first < events.length - 2 && center > centerAt(first + 1)) first++;
+    const position = first + (center - centerAt(first)) / (centerAt(first + 1) - centerAt(first));
+    // One uninterrupted movement, without the old stop / travel / stop quantization.
+    track.style.transform = `translate3d(0,${anchor - center}px,0)`;
+    const nextActive = Math.round(position);
+    if (nextActive !== active) {
+      active = nextActive;
+      section.dataset.historyYear = events[active].querySelector('h2').textContent;
+    }
     events.forEach((event,index) => {
-      const opacity = Math.max(0, Math.min(1, (visibleRange - Math.abs(position - index)) / .12));
-      event.style.opacity = opacity; event.style.visibility = opacity > 0 ? 'visible' : 'hidden';
+      // Read at the photo's arrival. Fade gently between years without overlapping copy.
+      const distance = Math.abs(position - index);
+      const fade = Math.max(0, Math.min(1, (distance - .18) / .32));
+      // In the narrow layout, the moving photo must clear the central copy lane first.
+      const clearance = stickySceneQuery.matches && photos[index]
+        ? Math.max(0, Math.min(1, (textTops[index] - (anchor + centers[index] - center + photoHeights[index] / 2)) / 48))
+        : 1;
+      const opacity = +((1 - smoothstep(fade)) * smoothstep(clearance)).toFixed(4);
+      const y = +(Math.max(-1, Math.min(1, index - position)) * 18).toFixed(3);
+      if (rendered[index].opacity !== opacity) {
+        event.style.opacity = opacity;
+        event.style.visibility = opacity > 0 ? 'visible' : 'hidden';
+        rendered[index].opacity = opacity;
+      }
+      if (opacity > 0 && rendered[index].y !== y) {
+        event.style.translate = `0 ${y}px`;
+        rendered[index].y = y;
+      }
     });
-    fill.style.transform = `scaleY(${.08 + .92 * position / (events.length - 1)})`;
+    fill.style.transform = `scaleY(${.08 + .92 * progress})`;
   }
   function setup() {
     timeline?.scrollTrigger?.kill(); timeline?.kill();
     gsap.set(track, { clearProps: 'transform' });
-    events.forEach(event => { event.style.removeProperty('opacity'); event.style.removeProperty('visibility'); event.style.removeProperty('transform'); });
+    events.forEach((event,index) => {
+      event.style.removeProperty('opacity'); event.style.removeProperty('visibility'); event.style.removeProperty('transform'); event.style.removeProperty('translate');
+      rendered[index].opacity = rendered[index].y = null;
+    });
+    active = -1;
+    delete section.dataset.historyYear;
     updateSceneHeight();
     stack.setAttribute('aria-hidden', 'true'); track.setAttribute('aria-hidden', 'true');
     if (needsFlowScene(640)) { section.dataset.historyMode = 'static'; return; }
@@ -154,9 +186,9 @@ function sec_5_scrollTrigger__init() {
     section.dataset.historyMode = sticky ? 'sticky' : 'animated';
     state.frame = 0; measure(); render();
     const settings = {
-      trigger: sticky ? section.querySelector('.sec-5-wrap') : stage, start: 'top top',
+      id: 'history-scroll', trigger: sticky ? section.querySelector('.sec-5-wrap') : stage, start: 'top top',
       end: () => '+=' + (sticky ? section.querySelector('.sec-5-wrap').offsetHeight - stage.offsetHeight : stage.offsetHeight * 5),
-      scrub: sticky ? .5 : 1, invalidateOnRefresh: true, onRefreshInit: measure, onRefresh: render,
+      scrub: sticky ? .5 : .65, invalidateOnRefresh: true, onRefreshInit: measure, onRefresh: render,
     };
     if (!sticky) Object.assign(settings, { pin: stage, pinSpacing: true, anticipatePin: 1 });
     timeline = gsap.timeline({ scrollTrigger: settings })
