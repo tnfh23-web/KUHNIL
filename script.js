@@ -129,7 +129,7 @@ function sec_5_scrollTrigger__init() {
   });
   section.prepend(list);
   const travel = events.length - 1, closingAt = travel + .55;
-  const expansionDuration = 3.5, expansionAt = closingAt + .1;
+  const expansionDuration = 2.85, expansionAt = closingAt + .1;
   const total = expansionAt + expansionDuration + 1.2;
   let timeline = null, closingIntro = null, introPlayed = false;
   let centers = [], photoHeights = [], textTops = [], anchor = 0, active = -1;
