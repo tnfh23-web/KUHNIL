@@ -113,13 +113,13 @@
     const header=document.querySelector('.top-bar');
     const locked=[...document.querySelectorAll('header,main,footer')].map(node=>({node,inert:node.inert}));
     const startingWidth=innerWidth;
-    let finished=false,timeline=null,lines=[],characters=[];
+    let finished=false,timeline=null,lines=[],words=[],characters=[];
     const blockScroll=event=>event.preventDefault();
     const blockKeys=event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))event.preventDefault();};
     function finish(){
       if(finished)return;finished=true;
       timeline?.kill();
-      gsap.set([...lines,...characters,header],{clearProps:'opacity,transform'});
+      gsap.set([...lines,...words,...characters,header],{clearProps:'opacity,transform'});
       root.classList.remove('is-kuhnil-loading','is-loader-ready','is-loader-transfer');
       overlay.remove();
       document.body.removeAttribute('aria-busy');
@@ -153,6 +153,7 @@
         });
         paragraph.replaceChildren(readable,line);lines.push(line);
       });
+      words=lines.flatMap(line=>[...line.querySelectorAll('.hero-word')]);
       characters=lines.flatMap(line=>[...line.querySelectorAll('.hero-character')]);
       gsap.set(characters,{opacity:0,yPercent:105});
       root.classList.add('is-loader-ready');
@@ -161,13 +162,13 @@
         {opacity:1,yPercent:0,duration:.65,stagger:.022,ease:'power3.out'},index*.6));
       timeline.addLabel('transfer','+=.35');
       timeline.call(()=>{
-        const centered=lines.map(line=>line.getBoundingClientRect());
+        const centered=words.map(word=>word.getBoundingClientRect());
         root.classList.add('is-loader-transfer');
-        lines.forEach((line,index)=>{
-          const target=line.getBoundingClientRect();gsap.set(line,{x:centered[index].left-target.left,y:centered[index].top-target.top});
-        });
+        const targets=words.map(word=>word.getBoundingClientRect());
+        // Preserve every word's visual position while centered rows become left-aligned.
+        gsap.set(words,{x:index=>centered[index].left-targets[index].left,y:index=>centered[index].top-targets[index].top});
       },null,'transfer');
-      timeline.to(lines,{x:0,y:0,duration:1.15,ease:'power3.inOut'},'transfer');
+      timeline.to(words,{x:0,y:0,duration:1.15,ease:'power3.inOut'},'transfer');
       timeline.to(overlay,{opacity:0,duration:1.05,ease:'power2.inOut'},'transfer');
       timeline.fromTo(header,{opacity:0,y:-12},{opacity:1,y:0,duration:.65,ease:'power2.out'},'transfer+=.35');
     });
