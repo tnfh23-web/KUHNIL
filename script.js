@@ -129,7 +129,8 @@ function sec_5_scrollTrigger__init() {
   });
   section.prepend(list);
   const travel = events.length - 1, closingAt = travel + .55;
-  const total = closingAt + 1.6 + 1.2;
+  const expansionDuration = 3.5, expansionAt = closingAt + .1;
+  const total = expansionAt + expansionDuration + 1.2;
   let timeline = null, closingIntro = null, introPlayed = false;
   let centers = [], photoHeights = [], textTops = [], anchor = 0, active = -1;
   let geometry = null, scrollDistance = 0;
@@ -243,9 +244,9 @@ function sec_5_scrollTrigger__init() {
     timeline = gsap.timeline({scrollTrigger: settings, onUpdate: render})
       .to(state, {frame: travel, duration: travel, ease: 'none'}, 0)
       .to(state, {retire: 1, duration: .35, ease: 'power1.inOut'}, closingAt)
-      .to(state, {expansion: 1, duration: 1.5, ease: 'power2.inOut'}, closingAt + .1)
-      .to(state, {shade: .5, duration: .65, ease: 'none'}, closingAt + .65)
-      .to({}, {duration: 1.2}, closingAt + 1.6);
+      .to(state, {expansion: 1, duration: expansionDuration, ease: 'none'}, expansionAt)
+      .to(state, {shade: .5, duration: expansionDuration * .45, ease: 'none'}, expansionAt + expansionDuration * .35)
+      .to({}, {duration: 1.2}, expansionAt + expansionDuration);
   }
   stickySceneQuery.addEventListener('change', () => { updateSceneHeight(true); setup(); requestLayoutRefresh(); });
   sceneControllers.push(setup);

@@ -17,7 +17,7 @@ Research HTML and desktop design match the original project. Vision photos are s
 
 History's `history-scroll` trigger measures photo centers, photo heights, copy bounds and ending geometry only on refresh. A linear track keeps the photo travel continuous; the nearest year gently fades, and the rail fills from the same playhead. Desktop photos meet the text's center; narrow screens wait until the photo clears the copy lane. After 2011 is read, the rail and historical copy retire; the same last photograph expands from its thumbnail bounds to every edge of the viewport. The image uses one transform and its frame uses a rectangular clip. Shade follows the expansion; at 98% the final message then the existing button play automatically, even if scrolling stops. Reversing below 90% resets that entrance. A final reading hold releases the complete image/copy/button scene into normal flow before the unchanged footer.
 
-The added ending distance is calculated once with the original photo travel speed preserved. Narrow screens use the same measured distance in their CSS sticky track. Very short screens keep all seven dates in an accessible list and show the closing photo/message/button in normal flow. The upscaled WebP is shared by the last thumbnail and the ending image; the original PNG remains. See `docs/content-sources.md` for the AI-restoration provenance and prompt direction. No wheel-input correction or new animation clock is used.
+The added ending distance is calculated once with the original photo travel speed preserved. Expansion uses 3.5 timeline units, about 2.3 times the previous 1.5-unit range, with linear easing to match the steady YoungPoong reference. At 1440×900 this is about 2.2 viewport heights; the shade follows that longer expansion, while final-copy timing and reading hold are preserved. Narrow screens use the same measured distance in their CSS sticky track. Very short screens keep all seven dates in an accessible list and show the closing photo/message/button in normal flow. The upscaled WebP is shared by the last thumbnail and the ending image; the original PNG remains. See `docs/content-sources.md` for the AI-restoration provenance and prompt direction. No wheel-input correction or new animation clock is used.
 
 <!-- code-map-review:start -->
 {
@@ -25,9 +25,9 @@ The added ending distance is calculated once with the original photo travel spee
   "files": {
     "additions.css": "1e85befef9b4f5027b72ba9d7f3c7daf13b5a85f57581e17ba8f99e91e315848",
     "additions.js": "7564c5ec8c18ecfe975a470b3a22744ce0c79fc1b5f7511931a8dfdb7f6847e3",
-    "index.html": "5225a72bed014aa871319e80dd43bcec44bfbf36ff20288fd58477645440c08a",
+    "index.html": "af05d86a05c17720b12d6c1c6fe40fab70216561f4cc49ebcf3ecd35839b1eb2",
     "responsive.css": "41024f1d180034baf771846905a653d2f56f28b177b235b95e5f7e559ddbf404",
-    "script.js": "72d0661ad9d50dfb0448d3bc7e21fdf667e4fac8ed7a1f1f2e6a3ba3b4705289",
+    "script.js": "b064d997d4110d6d228fbf08470c4c6eb27c54e9248035df9d35290e6e5b3154",
     "style.css": "130a5041838ef62ecccb465bd4f02babd96647640f9347fa3c1742cf4857fcfd",
     "variable.css": "d81016d4e2420655ee5c271bff5295e052d635f9a9727fb447781360200a016f"
   }
