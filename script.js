@@ -45,14 +45,15 @@ function requestLayoutRefresh() {
   cancelAnimationFrame(refreshFrame);
   refreshFrame = requestAnimationFrame(() => {
     ScrollTrigger.refresh();
-    window.AOS?.refresh();
+    document.querySelectorAll('[data-aos]').forEach(element => element.setAttribute('data-aos-offset', Math.min(180, innerHeight * .18)));
+    window.AOS?.refreshHard();
   });
 }
 
 // Facility emphasis follows the measured text width at every breakpoint.
 gsap.to('.sec-2-scroll-text', {
   '--hlw': '100%', duration: .9, ease: 'power2.out',
-  scrollTrigger: { trigger: '.sec-2-scroll-text', start: 'top 80%', toggleActions: 'play none none reverse' },
+  scrollTrigger: { trigger: '.sec-2-scroll-text', start: () => `top bottom-=${Math.min(180, innerHeight * .18)}`, toggleActions: 'play none none reverse' },
 });
 
 function sec_3_scrollTrigger__init() {

@@ -79,19 +79,22 @@
   const revealSetups=[];
   function revealGroup(targets,trigger,{fadeOnly=false,delay=0}={}) {
     if(!targets.length)return;
-    let timeline=null,scrollTrigger=null;
+    let controllers=[];
     function setup(){
-      scrollTrigger?.kill();timeline?.kill();
+      controllers.forEach(({timeline,scrollTrigger})=>{scrollTrigger.kill();timeline.kill();});
+      controllers=[];
       gsap.set(targets,{clearProps:'opacity,transform,clipPath'});
-      if(motionPreferences.reduce||targets.every(target=>target.dataset.revealed==='true'))return;
-      timeline=gsap.timeline({paused:true,onComplete:()=>targets.forEach(target=>target.dataset.revealed='true')});
+      if(motionPreferences.reduce)return;
       targets.forEach((target,index)=>{
+        if(target.dataset.revealed==='true')return;
+        const timeline=gsap.timeline({paused:true,onComplete:()=>{target.dataset.revealed='true';}});
         timeline.fromTo(target,fadeOnly?{opacity:0}:{opacity:0,y:22},
           {opacity:1,...(fadeOnly?{}:{y:0}),duration:fadeOnly?.95:.8,ease:'power2.out',clearProps:'opacity,transform'},delay+index*.16);
+        const scrollTrigger=ScrollTrigger.create({trigger:target,start:()=>`top bottom-=${Math.min(180,innerHeight*.18)}`,once:true,onEnter:()=>timeline.play()});
+        controllers.push({timeline,scrollTrigger});
       });
-      scrollTrigger=ScrollTrigger.create({trigger,start:fadeOnly?'top 74%':'top 85%',once:true,onEnter:()=>timeline.play()});
     }
-    trigger.addEventListener('focusin',()=>timeline?.progress(1));
+    trigger.addEventListener('focusin',()=>controllers.forEach(({timeline})=>timeline.progress(1)));
     revealSetups.push(setup);setup();
   }
   const visionIntro=document.querySelector('.kuhnil-vision-intro');
