@@ -185,3 +185,52 @@ footer { margin-top: 8rem; }
   .sec-4-grid .tab-list .text-box h2 { font-size: 2.8rem; }
   .sec-4-grid .tab-list .text-box p { font-size: 1.8rem; }
 }
+
+/* Mobile VISION descriptions are visible on the card, including the short-screen flow. */
+@media (max-width: 640px) {
+  .kuhnil-capabilities { --vision-screen-height: 100vh; display: block; }
+  .kuhnil-capabilities .kuhnil-capability {
+    height: 30rem;
+    min-height: 30rem;
+    margin-bottom: 2rem;
+    transition: none;
+  }
+  .kuhnil-capabilities .kuhnil-capability-detail {
+    grid-template-rows: 1fr;
+    width: 100%;
+    opacity: 1;
+    transition: none;
+    pointer-events: auto;
+  }
+  .kuhnil-capabilities .kuhnil-capability-detail > p { padding-top: 1.6rem; }
+}
+
+@media (max-width: 640px) and (min-height: 560px) {
+  .kuhnil-capabilities {
+    --vision-card-gap: min(24rem, calc(var(--vision-screen-height) * .32));
+    --vision-stack-hold: min(14rem, calc(var(--vision-screen-height) * .18));
+  }
+  .kuhnil-capabilities::after {
+    content: '';
+    display: block;
+    height: calc(var(--vision-card-gap) + 42px + var(--vision-stack-hold));
+  }
+  .kuhnil-capabilities .kuhnil-capability {
+    --vision-card-index: 0;
+    position: sticky;
+    top: calc(var(--vision-stack-top, 12rem) + var(--vision-card-index) * 14px);
+    z-index: calc(1 + var(--vision-card-index));
+    height: calc(var(--vision-screen-height) - var(--vision-stack-top, 12rem) - 58px);
+    margin-bottom: var(--vision-card-gap);
+  }
+  .kuhnil-capabilities .kuhnil-capability:nth-child(2) { --vision-card-index: 1; }
+  .kuhnil-capabilities .kuhnil-capability:nth-child(3) { --vision-card-index: 2; }
+  .kuhnil-capabilities .kuhnil-capability:nth-child(4) { --vision-card-index: 3; }
+  .kuhnil-capabilities .kuhnil-capability:last-child { margin-bottom: 0; }
+}
+
+@supports (height: 100svh) {
+  @media (max-width: 640px) {
+    .kuhnil-capabilities { --vision-screen-height: 100svh; }
+  }
+}

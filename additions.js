@@ -24,25 +24,42 @@
   const accordion = document.querySelector('.kuhnil-capabilities');
   const cards = [...accordion.querySelectorAll('.kuhnil-capability')];
   const toggleMode = matchMedia('(max-width: 1100px), (hover: none)');
+  const mobileVision = matchMedia('(max-width: 640px)');
   let active = -1, resizeFrame = 0;
   function setActive(index) {
     active = index;
     cards.forEach((card,current) => {
-      const expanded = current === active;
+      const expanded = !mobileVision.matches && current === active;
       card.classList.toggle('is-active',expanded);
       card.querySelector('button').setAttribute('aria-expanded',String(expanded));
-      card.querySelector('.kuhnil-capability-detail').setAttribute('aria-hidden',String(!expanded));
+      card.querySelector('.kuhnil-capability-detail').setAttribute('aria-hidden',String(!(mobileVision.matches || expanded)));
     });
   }
   function measureAccordion() {
-    accordion.dataset.accordionMode = toggleMode.matches ? 'toggle' : 'hover';
-    const gap = parseFloat(getComputedStyle(accordion).columnGap) || 0;
-    const available = accordion.clientWidth - gap * (cards.length-1);
-    const padding = parseFloat(getComputedStyle(cards[0]).paddingLeft) * 2 + 2;
-    accordion.style.setProperty('--vision-detail-width',`${Math.max(140,Math.floor((available-padding*cards.length)*2.35/(cards.length+1.35))-1)}px`);
+    const mobile = mobileVision.matches;
+    accordion.dataset.accordionMode = mobile ? 'stack' : toggleMode.matches ? 'toggle' : 'hover';
+    cards.forEach(card => {
+      card.querySelector('button').hidden = mobile;
+      card.querySelector('.kuhnil-capability-title').hidden = !mobile;
+    });
+    if (mobile) {
+      const headerHeight = document.querySelector('.top-bar').getBoundingClientRect().height;
+      accordion.style.setProperty('--vision-stack-top', `${Math.ceil(headerHeight) + 16}px`);
+    } else {
+      const gap = parseFloat(getComputedStyle(accordion).columnGap) || 0;
+      const available = accordion.clientWidth - gap * (cards.length-1);
+      const padding = parseFloat(getComputedStyle(cards[0]).paddingLeft) * 2 + 2;
+      accordion.style.setProperty('--vision-detail-width',`${Math.max(140,Math.floor((available-padding*cards.length)*2.35/(cards.length+1.35))-1)}px`);
+    }
+    setActive(active);
   }
   cards.forEach((card,index) => {
     const button = card.querySelector('button');
+    const title = document.createElement('span');
+    title.className = 'kuhnil-capability-title';
+    title.textContent = button.textContent;
+    title.hidden = true;
+    button.after(title);
     card.addEventListener('pointerenter',event=>{if(!toggleMode.matches && event.pointerType!=='touch')setActive(index);});
     card.addEventListener('focusin',()=>{if(!toggleMode.matches)setActive(index);});
     button.addEventListener('click',()=>setActive(toggleMode.matches && active===index ? -1 : index));
@@ -61,7 +78,8 @@
   accordion.addEventListener('pointerleave',()=>{if(!toggleMode.matches && !accordion.contains(document.activeElement))setActive(-1);});
   accordion.addEventListener('focusout',event=>{if(!toggleMode.matches && !accordion.contains(event.relatedTarget))setActive(-1);});
   accordion.addEventListener('transitionend',event=>{if(event.propertyName==='height')requestLayoutRefresh();});
-  toggleMode.addEventListener('change',()=>{measureAccordion();setActive(active);});
+  toggleMode.addEventListener('change',measureAccordion);
+  mobileVision.addEventListener('change',measureAccordion);
   window.addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(measureAccordion);},{passive:true});
   if(window.ResizeObserver){
     let observedWidth=0;
