@@ -208,7 +208,7 @@ footer { margin-top: 8rem; }
 
 @media (max-width: 640px) and (min-height: 560px) {
   .kuhnil-capabilities {
-    --vision-card-gap: min(16rem, calc(var(--vision-screen-height) * .22));
+    --vision-card-gap: 4.8rem;
     --vision-stack-hold: min(10rem, calc(var(--vision-screen-height) * .14));
   }
   .kuhnil-capabilities::after {
