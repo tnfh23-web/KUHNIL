@@ -187,6 +187,7 @@ footer { margin-top: 8rem; }
 }
 
 /* Mobile VISION descriptions are visible on the card, including the short-screen flow. */
+.kuhnil-vision-gap { display: none; }
 @media (max-width: 640px) {
   .kuhnil-capabilities { --vision-screen-height: 100vh; display: block; }
   .kuhnil-capabilities .kuhnil-capability {
@@ -207,26 +208,29 @@ footer { margin-top: 8rem; }
 
 @media (max-width: 640px) and (min-height: 560px) {
   .kuhnil-capabilities {
-    --vision-card-gap: min(24rem, calc(var(--vision-screen-height) * .32));
-    --vision-stack-hold: min(14rem, calc(var(--vision-screen-height) * .18));
+    --vision-card-gap: min(16rem, calc(var(--vision-screen-height) * .22));
+    --vision-stack-hold: min(10rem, calc(var(--vision-screen-height) * .14));
   }
   .kuhnil-capabilities::after {
     content: '';
     display: block;
-    height: calc(var(--vision-card-gap) + 42px + var(--vision-stack-hold));
+    height: var(--vision-stack-hold);
   }
   .kuhnil-capabilities .kuhnil-capability {
     --vision-card-index: 0;
     position: sticky;
     top: calc(var(--vision-stack-top, 12rem) + var(--vision-card-index) * 14px);
     z-index: calc(1 + var(--vision-card-index));
-    height: calc(var(--vision-screen-height) - var(--vision-stack-top, 12rem) - 58px);
-    margin-bottom: var(--vision-card-gap);
+    height: clamp(30rem, calc(var(--vision-screen-height) * .54), 44rem);
+    margin-bottom: calc((3 - var(--vision-card-index)) * 14px);
   }
-  .kuhnil-capabilities .kuhnil-capability:nth-child(2) { --vision-card-index: 1; }
-  .kuhnil-capabilities .kuhnil-capability:nth-child(3) { --vision-card-index: 2; }
-  .kuhnil-capabilities .kuhnil-capability:nth-child(4) { --vision-card-index: 3; }
-  .kuhnil-capabilities .kuhnil-capability:last-child { margin-bottom: 0; }
+  .kuhnil-capabilities .kuhnil-capability:nth-of-type(2) { --vision-card-index: 1; }
+  .kuhnil-capabilities .kuhnil-capability:nth-of-type(3) { --vision-card-index: 2; }
+  .kuhnil-capabilities .kuhnil-capability:nth-of-type(4) { --vision-card-index: 3; }
+  /* Equal top + bottom-margin sums make the four sticky cards release together. */
+  .kuhnil-vision-gap { display: block; height: calc(var(--vision-card-gap) - 42px); }
+  .kuhnil-capability:nth-of-type(2) + .kuhnil-vision-gap { height: calc(var(--vision-card-gap) - 28px); }
+  .kuhnil-capability:nth-of-type(3) + .kuhnil-vision-gap { height: calc(var(--vision-card-gap) - 14px); }
 }
 
 @supports (height: 100svh) {

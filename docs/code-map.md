@@ -2,7 +2,7 @@
 
 | File | Responsibility |
 | --- | --- |
-| `index.html` | Original sections and research markup, vision/product content, loading overlay and history ending: upscaled final photo, final message and existing View More button in a full-screen layer. Placeholder menu/View More destinations remain by request. |
+| `index.html` | Original sections and research markup, vision/product content and three mobile-only VISION flow gaps, loading overlay and history ending: upscaled final photo, final message and existing View More button in a full-screen layer. Placeholder menu/View More destinations remain by request. |
 | `variable.css` | Existing brand palette and maximum container width. |
 | `style.css` | Original desktop styling, unchanged. |
 | `script.js` | Existing Lenis integration and facility emphasis; responsive building/history scenes. Continuous photo/year/rail timing leads into a full-screen last-photo expansion and an automatic final-copy/button entrance. Stable touch height and short-screen flow remain. Research keeps its original click tabs. |
@@ -15,7 +15,7 @@ The page retains its existing GSAP/ScrollTrigger, Swiper and Lenis dependencies.
 
 Research HTML and desktop design match the original project. Vision photos are separate from existing research/history assets. Asset origins are listed in `content-sources.md`.
 
-VISION uses the mobile layout at widths up to 640px. The existing button label supplies a static heading in that layout, its accordion button is hidden, and every description stays visible and accessible. At heights of at least 560px, native CSS sticky cards stack below the measured header with 14px offsets. Their height follows the small viewport height, leaving the last card's copy inside the viewport. A trailing flow spacer keeps the earlier card edges visible while the last card is read, then the stack releases into the facility section. Shorter screens show the same expanded content in normal flow. Width changes restore the original tablet toggles and desktop hover/keyboard controls. The stack adds no scrub animation or per-scroll layout measurement.
+VISION uses the mobile layout at widths up to 640px. The existing button label supplies a static heading in that layout, its accordion button is hidden, and every description stays visible and accessible. At heights of at least 560px, native CSS sticky cards stack below the measured header with 14px offsets. Card height is 54% of the small viewport height, clamped to 300–440px. Three mobile-only flow gaps provide the reading distance independently of each card's bottom margin. The bottom margins compensate the 14px top offsets so all four cards share one release boundary and leave together. A short trailing flow hold keeps the final copy readable before the facility section. Shorter screens show the same expanded content in normal flow. Width changes restore the original tablet toggles and desktop hover/keyboard controls. The stack adds no scrub animation or per-scroll layout measurement.
 
 The loading hero centers both paragraph boxes and the rows inside them. At transfer, all word bounds are read before and after switching to the final left alignment and normal scrollbar layout, then their transform offsets animate to zero together. Wheel/touch/key input remains locked until completion. Glyph reveal stays on inner character spans; movement stays on outer word spans. Measurement happens once at transfer, and the original 1.15-second transfer and cleanup/fallback remain. Restoring the scrollbar before the target measurement avoids a text-width change at completion.
 
@@ -27,10 +27,10 @@ The added ending distance is calculated once with the original photo travel spee
 {
   "version": 1,
   "files": {
-    "additions.css": "04bdde63b8a25adf98ee869a2a61a4bf7f4a3de33118ae619d3fd23617e6d27d",
+    "additions.css": "947f08df3eb030380d8aef0ea3f34342e75922e96bb39affd25ec0cd51619f8b",
     "additions.js": "b99627542d94b5a11ebe300ed1f123af3dec194971c2ed9ef1103af3fce3af8e",
-    "index.html": "23c7cfa38a5f7dacfcb5b92d0f294d5204e667472557868358db4ec5f6516fc8",
-    "responsive.css": "baaf0b7bbf85def18802a2c0b076444eaeb2ef9f6d9c17eef7a85144fab7e27f",
+    "index.html": "934fd5de1e5b2d3ff92ca6b80442d36c7417452ba671e744cd97fb40b59526b5",
+    "responsive.css": "bbf806d3574887c2881b54e5ad409731451eb64cfdf4f00f0891c27456b5dcf8",
     "script.js": "b5340dc21dbcbbce5c92613816406709a2cf16e6a9c04036c9215dac8908e069",
     "style.css": "130a5041838ef62ecccb465bd4f02babd96647640f9347fa3c1742cf4857fcfd",
     "variable.css": "d81016d4e2420655ee5c271bff5295e052d635f9a9727fb447781360200a016f"
